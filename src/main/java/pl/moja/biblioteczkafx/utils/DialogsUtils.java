@@ -1,7 +1,8 @@
-package pl.moja.biblioteczkafx.controller.dialogs;
+package pl.moja.biblioteczkafx.utils;
 
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
+import javafx.scene.control.TextArea;
 
 import java.util.Optional;
 import java.util.ResourceBundle;
@@ -22,5 +23,15 @@ public class DialogsUtils {
         informationAlert.setTitle(bundle.getString("exit.title"));
         informationAlert.setHeaderText(bundle.getString("exit.header"));
         return informationAlert.showAndWait();
+    }
+
+    public static void errorDialog(String error) {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle(bundle.getString("error.title"));
+        alert.setHeaderText(bundle.getString("error.header"));
+
+        TextArea textArea = new TextArea();
+        alert.getDialogPane().setContent(textArea);
+        alert.showAndWait();
     }
 }
