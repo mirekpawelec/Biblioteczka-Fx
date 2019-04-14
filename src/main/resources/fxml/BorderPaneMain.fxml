@@ -12,7 +12,7 @@
 
 <BorderPane fx:id="borderPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1200.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="pl.moja.biblioteczkafx.controller.MainController">
    <top>
-       <VBox prefHeight="200.0" prefWidth="100.0" BorderPane.alignment="CENTER">
+       <VBox BorderPane.alignment="CENTER">
          <MenuBar>
            <menus>
              <Menu mnemonicParsing="false" text="Plik">
@@ -39,7 +39,7 @@
              </Menu>
            </menus>
          </MenuBar>
-           <fx:include fx:id="topMenuButtons" source="TopMenuButtons.fxml" />
+         <fx:include fx:id="topMenuButtons" source="TopMenuButtons.fxml" />
        </VBox>
    </top>
 </BorderPane>
