@@ -13,7 +13,7 @@ public class CategoryModel {
     // klasa serwisowa dla encji Category, łączy widok (kontrolki javafx) przez  kontroler z bazą danych (implementacja modelu MVC)
 
     private ObservableList<CategoryFx> categoryObservableList = FXCollections.observableArrayList();
-    private ObjectProperty<CategoryFx> category = new SimpleObjectProperty<>();
+    private ObjectProperty<CategoryFx> categoryProperty = new SimpleObjectProperty<>();
 
     public void init() {
         CategoryDao categoryDao = new CategoryDao(DbManager.getConnectionSource());
@@ -39,7 +39,16 @@ public class CategoryModel {
 
     public void deleteCategoryById() {
         CategoryDao categoryDao = new CategoryDao(DbManager.getConnectionSource());
-        categoryDao.deleteById(Category.class, category.getValue().getId());
+        categoryDao.deleteById(Category.class, categoryProperty.getValue().getId());
+        DbManager.closeConnectionSource();
+        init();
+    }
+
+    public void updateCategoryInDataBase() {
+        CategoryDao categoryDao = new CategoryDao(DbManager.getConnectionSource());
+        Category categoryToBeUpdate = categoryDao.findById(Category.class, categoryProperty.getValue().getId());
+        categoryToBeUpdate.setName(getCategory().getName());
+        categoryDao.createOrUpdate(categoryToBeUpdate);
         DbManager.closeConnectionSource();
         init();
     }
@@ -53,14 +62,18 @@ public class CategoryModel {
     }
 
     public CategoryFx getCategory() {
-        return category.get();
-    }
-
-    public ObjectProperty<CategoryFx> categoryProperty() {
-        return category;
+        return categoryProperty.get();
     }
 
     public void setCategory(CategoryFx category) {
-        this.category.set(category);
+        this.categoryProperty.set(category);
+    }
+
+    public ObjectProperty<CategoryFx> getCategoryProperty() {
+        return categoryProperty;
+    }
+
+    public void setCategoryProperty(ObjectProperty<CategoryFx> categoryProperty) {
+        this.categoryProperty = categoryProperty;
     }
 }
