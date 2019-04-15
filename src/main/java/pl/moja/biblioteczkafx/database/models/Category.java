@@ -12,8 +12,8 @@ public class Category implements BaseModel {
     private int id;
     @DatabaseField(columnName = "NAME", canBeNull = false)
     private String name;
-    @ForeignCollectionField(eager = true)
-    private ForeignCollection<Book> books;
+//    @ForeignCollectionField(eager = true)
+//    private ForeignCollection<Book> books;
 
     public Category() {
     }
@@ -34,11 +34,11 @@ public class Category implements BaseModel {
         this.name = name;
     }
 
-    public ForeignCollection<Book> getBooks() {
-        return books;
-    }
-
-    public void setBooks(ForeignCollection<Book> books) {
-        this.books = books;
-    }
+//    public ForeignCollection<Book> getBooks() {
+//        return books;
+//    }
+//
+//    public void setBooks(ForeignCollection<Book> books) {
+//        this.books = books;
+//    }
 }
