@@ -7,6 +7,7 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
 import pl.moja.biblioteczkafx.modelfx.CategoryFx;
 import pl.moja.biblioteczkafx.modelfx.CategoryModel;
+import pl.moja.biblioteczkafx.utils.DialogsUtils;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -21,6 +22,8 @@ public class CategoryController implements Initializable {
     private ComboBox<CategoryFx> categoryComboBox;
     @FXML
     private Button deleteCategoryButton;
+    @FXML
+    private Button editCategoryButton;
 
     CategoryModel categoryModel;
 
@@ -34,7 +37,8 @@ public class CategoryController implements Initializable {
 
     private void initBindings() {
         addCategoryButton.disableProperty().bind(categoryTextField.textProperty().isEmpty());
-        deleteCategoryButton.disableProperty().bind(this.categoryModel.categoryProperty().isNull());
+        deleteCategoryButton.disableProperty().bind(this.categoryModel.getCategoryProperty().isNull());
+        editCategoryButton.disableProperty().bind(this.categoryModel.getCategoryProperty().isNull());
     }
 
     public void addCategory() {
@@ -48,5 +52,13 @@ public class CategoryController implements Initializable {
 
     public void onActionComboBox() {
         this.categoryModel.setCategory(this.categoryComboBox.getSelectionModel().getSelectedItem());
+    }
+
+    public void editCategory() {
+        String newCategoryName = DialogsUtils.editDialog(this.categoryModel.getCategoryProperty().getName());
+        if (newCategoryName != null) {
+            this.categoryModel.getCategory().setName(newCategoryName);
+            this.categoryModel.updateCategoryInDataBase();
+        }
     }
 }
