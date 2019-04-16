@@ -5,6 +5,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
+import javafx.scene.control.TreeView;
 import pl.moja.biblioteczkafx.modelfx.CategoryFx;
 import pl.moja.biblioteczkafx.modelfx.CategoryModel;
 import pl.moja.biblioteczkafx.utils.DialogsUtils;
@@ -25,6 +26,8 @@ public class CategoryController implements Initializable {
     private Button deleteCategoryButton;
     @FXML
     private Button editCategoryButton;
+    @FXML
+    private TreeView<String> categoryTreeView;
 
     CategoryModel categoryModel;
 
@@ -37,6 +40,7 @@ public class CategoryController implements Initializable {
             DialogsUtils.errorDialog(e.getMessage());
         }
         this.categoryComboBox.setItems(categoryModel.getCategoryObservableList());
+        this.categoryTreeView.setRoot(this.categoryModel.getRoot());
         initBindings();
     }
 

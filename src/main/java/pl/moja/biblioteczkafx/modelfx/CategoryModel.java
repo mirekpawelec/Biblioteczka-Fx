@@ -4,10 +4,14 @@ import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.scene.control.TreeItem;
 import pl.moja.biblioteczkafx.database.dao.CategoryDao;
 import pl.moja.biblioteczkafx.database.dbutils.DbManager;
 import pl.moja.biblioteczkafx.database.models.Category;
+import pl.moja.biblioteczkafx.utils.converters.ConverterCategory;
 import pl.moja.biblioteczkafx.utils.exceptions.ApplicationException;
+
+import java.util.List;
 
 public class CategoryModel {
 
@@ -15,17 +19,33 @@ public class CategoryModel {
 
     private ObservableList<CategoryFx> categoryObservableList = FXCollections.observableArrayList();
     private ObjectProperty<CategoryFx> categoryProperty = new SimpleObjectProperty<>();
+    private TreeItem<String> root = new TreeItem<>();
 
     public void init() throws ApplicationException {
         CategoryDao categoryDao = new CategoryDao(DbManager.getConnectionSource());
+        List<Category> categories = categoryDao.queryForAll(Category.class);
+        initCategoryList(categories);
+        initRoot(categories);
+        DbManager.closeConnectionSource();
+    }
+
+    private void initRoot(List<Category> categories) {
+        this.root.getChildren().clear();
+        categories.forEach(c -> {
+            TreeItem<String> categoryTreeItem = new TreeItem<>(c.getName());
+            c.getBooks().forEach(bookTreeItem -> {
+                categoryTreeItem.getChildren().add(new TreeItem(bookTreeItem.getTitle()));
+            });
+            this.root.getChildren().add(categoryTreeItem);
+        });
+    }
+
+    private void initCategoryList(List<Category> categories) {
         categoryObservableList.clear();
-        categoryDao.queryForAll(Category.class).forEach(c -> {
-            CategoryFx categoryFx = new CategoryFx();
-            categoryFx.setId(c.getId());
-            categoryFx.setName(c.getName());
+        categories.forEach(c -> {
+            CategoryFx categoryFx = ConverterCategory.convertToCategoryFx(c);
             this.categoryObservableList.add(categoryFx);
         });
-        DbManager.closeConnectionSource();
     }
 
     public void saveCategoryInDataBase(String name) throws ApplicationException {
@@ -76,5 +96,13 @@ public class CategoryModel {
 
     public void setCategoryProperty(ObjectProperty<CategoryFx> categoryProperty) {
         this.categoryProperty = categoryProperty;
+    }
+
+    public TreeItem<String> getRoot() {
+        return root;
+    }
+
+    public void setRoot(TreeItem<String> root) {
+        this.root = root;
     }
 }
