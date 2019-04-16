@@ -8,6 +8,7 @@ import javafx.scene.control.TextField;
 import pl.moja.biblioteczkafx.modelfx.CategoryFx;
 import pl.moja.biblioteczkafx.modelfx.CategoryModel;
 import pl.moja.biblioteczkafx.utils.DialogsUtils;
+import pl.moja.biblioteczkafx.utils.exceptions.ApplicationException;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -30,7 +31,11 @@ public class CategoryController implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         this.categoryModel = new CategoryModel();
-        this.categoryModel.init();
+        try {
+            this.categoryModel.init();
+        } catch (ApplicationException e) {
+            DialogsUtils.errorDialog(e.getMessage());
+        }
         this.categoryComboBox.setItems(categoryModel.getCategoryObservableList());
         initBindings();
     }
@@ -42,12 +47,20 @@ public class CategoryController implements Initializable {
     }
 
     public void addCategory() {
-        categoryModel.saveCategoryInDataBase(categoryTextField.getText());
+        try {
+            categoryModel.saveCategoryInDataBase(categoryTextField.getText());
+        } catch (ApplicationException e) {
+            DialogsUtils.errorDialog(e.getMessage());
+        }
         this.categoryTextField.clear();
     }
 
     public void deleteCategory() {
-        this.categoryModel.deleteCategoryById();
+        try {
+            this.categoryModel.deleteCategoryById();
+        } catch (ApplicationException e) {
+            DialogsUtils.errorDialog(e.getMessage());
+        }
     }
 
     public void onActionComboBox() {
@@ -58,7 +71,11 @@ public class CategoryController implements Initializable {
         String newCategoryName = DialogsUtils.editDialog(this.categoryModel.getCategoryProperty().getName());
         if (newCategoryName != null) {
             this.categoryModel.getCategory().setName(newCategoryName);
-            this.categoryModel.updateCategoryInDataBase();
+            try {
+                this.categoryModel.updateCategoryInDataBase();
+            } catch (ApplicationException e) {
+                DialogsUtils.errorDialog(e.getMessage());
+            }
         }
     }
 }

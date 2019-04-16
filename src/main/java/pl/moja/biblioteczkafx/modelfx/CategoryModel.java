@@ -7,6 +7,7 @@ import javafx.collections.ObservableList;
 import pl.moja.biblioteczkafx.database.dao.CategoryDao;
 import pl.moja.biblioteczkafx.database.dbutils.DbManager;
 import pl.moja.biblioteczkafx.database.models.Category;
+import pl.moja.biblioteczkafx.utils.exceptions.ApplicationException;
 
 public class CategoryModel {
 
@@ -15,7 +16,7 @@ public class CategoryModel {
     private ObservableList<CategoryFx> categoryObservableList = FXCollections.observableArrayList();
     private ObjectProperty<CategoryFx> categoryProperty = new SimpleObjectProperty<>();
 
-    public void init() {
+    public void init() throws ApplicationException {
         CategoryDao categoryDao = new CategoryDao(DbManager.getConnectionSource());
         categoryObservableList.clear();
         categoryDao.queryForAll(Category.class).forEach(c -> {
@@ -27,7 +28,7 @@ public class CategoryModel {
         DbManager.closeConnectionSource();
     }
 
-    public void saveCategoryInDataBase(String name) {
+    public void saveCategoryInDataBase(String name) throws ApplicationException {
         CategoryDao categoryDao = new CategoryDao(DbManager.getConnectionSource());
         Category category = new Category();
         category.setName(name);
@@ -37,14 +38,14 @@ public class CategoryModel {
         init();
     }
 
-    public void deleteCategoryById() {
+    public void deleteCategoryById() throws ApplicationException {
         CategoryDao categoryDao = new CategoryDao(DbManager.getConnectionSource());
         categoryDao.deleteById(Category.class, categoryProperty.getValue().getId());
         DbManager.closeConnectionSource();
         init();
     }
 
-    public void updateCategoryInDataBase() {
+    public void updateCategoryInDataBase() throws ApplicationException {
         CategoryDao categoryDao = new CategoryDao(DbManager.getConnectionSource());
         Category categoryToBeUpdate = categoryDao.findById(Category.class, categoryProperty.getValue().getId());
         categoryToBeUpdate.setName(getCategory().getName());

@@ -10,7 +10,7 @@ public class Category implements BaseModel {
 
     @DatabaseField(generatedId = true)
     private int id;
-    @DatabaseField(columnName = "NAME", canBeNull = false)
+    @DatabaseField(columnName = "NAME", canBeNull = false, unique = true)
     private String name;
 //    @ForeignCollectionField(eager = true)
 //    private ForeignCollection<Book> books;
