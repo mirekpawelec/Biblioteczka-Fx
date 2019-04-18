@@ -6,6 +6,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
+import javafx.scene.control.cell.TextFieldTableCell;
 import pl.moja.biblioteczkafx.modelfx.AuthorFx;
 import pl.moja.biblioteczkafx.modelfx.AuthorModel;
 import pl.moja.biblioteczkafx.utils.DialogsUtils;
@@ -47,6 +48,13 @@ public class AuthorController implements Initializable {
         this.authorTebleView.setItems(this.authorModel.getAuthorFxObservableList());
         this.nameColumn.setCellValueFactory(cellData -> cellData.getValue().nameProperty());
         this.surnameColumn.setCellValueFactory(cellData -> cellData.getValue().surnameProperty());
+
+        this.nameColumn.setCellFactory(TextFieldTableCell.forTableColumn());
+        this.surnameColumn.setCellFactory(TextFieldTableCell.forTableColumn());
+
+        this.authorTebleView.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+            this.authorModel.setAuthorFxObjectPropertyEdit(newValue);
+        });
     }
 
     @FXML
@@ -58,5 +66,24 @@ public class AuthorController implements Initializable {
         }
         this.nameTextField.clear();
         this.surnameTextField.clear();
+    }
+
+    public void onEditCommitName(TableColumn.CellEditEvent<AuthorFx, String> authorFxStringCellEditEvent) {
+        this.authorModel.getAuthorFxObjectPropertyEdit().setName(authorFxStringCellEditEvent.getNewValue());
+        updateInDatabase();
+
+    }
+
+    public void onEditCommitSurname(TableColumn.CellEditEvent<AuthorFx, String> authorFxStringCellEditEvent) {
+        this.authorModel.getAuthorFxObjectPropertyEdit().setSurname(authorFxStringCellEditEvent.getNewValue());
+        updateInDatabase();
+    }
+
+    private void updateInDatabase() {
+        try {
+            this.authorModel.saveAuthorInDataBaseEdit();
+        } catch (ApplicationException e) {
+            DialogsUtils.errorDialog(e.getMessage());
+        }
     }
 }
