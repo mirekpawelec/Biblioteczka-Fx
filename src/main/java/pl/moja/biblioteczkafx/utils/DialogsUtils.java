@@ -31,7 +31,7 @@ public class DialogsUtils {
         alert.setTitle(bundle.getString("error.title"));
         alert.setHeaderText(bundle.getString("error.header"));
 
-        TextArea textArea = new TextArea();
+        TextArea textArea = new TextArea(error);
         alert.getDialogPane().setContent(textArea);
         alert.showAndWait();
     }
