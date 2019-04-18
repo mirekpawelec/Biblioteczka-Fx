@@ -36,10 +36,9 @@ public class FillDatabase {
 
         Category category2 = new Category();
         category2.setName("Sensacja");
-        CategoryDao categoryDao = new CategoryDao(DbManager.getConnectionSource());
+        CategoryDao categoryDao = new CategoryDao();
         try {
             categoryDao.createOrUpdate(category2);
-            DbManager.closeConnectionSource();
         } catch (ApplicationException e) {
             e.printStackTrace();
         }
@@ -88,7 +87,7 @@ public class FillDatabase {
         book4.setAddedDate(new Date());
         book4.setDescription("Do przeczytania");
 
-        BookDao bookDao = new BookDao(DbManager.getConnectionSource());
+        BookDao bookDao = new BookDao();
         try {
             bookDao.createOrUpdate(book1);
             bookDao.createOrUpdate(book2);
@@ -97,6 +96,5 @@ public class FillDatabase {
         } catch (ApplicationException e) {
             e.printStackTrace();
         }
-        DbManager.closeConnectionSource();
     }
 }

@@ -5,10 +5,12 @@ import com.j256.ormlite.dao.DaoManager;
 import com.j256.ormlite.logger.Logger;
 import com.j256.ormlite.logger.LoggerFactory;
 import com.j256.ormlite.support.ConnectionSource;
+import pl.moja.biblioteczkafx.database.dbutils.DbManager;
 import pl.moja.biblioteczkafx.database.models.BaseModel;
 import pl.moja.biblioteczkafx.utils.FxmlUtils;
 import pl.moja.biblioteczkafx.utils.exceptions.ApplicationException;
 
+import java.io.IOException;
 import java.sql.SQLException;
 import java.util.List;
 
@@ -16,8 +18,8 @@ public abstract class CommonDao {
     private static final Logger LOGGER = LoggerFactory.getLogger(CommonDao.class);
     protected final ConnectionSource connectionSource;
 
-    public CommonDao(ConnectionSource connectionSource) {
-        this.connectionSource = connectionSource;
+    public CommonDao() {
+        this.connectionSource = DbManager.getConnectionSource();
     }
 
     public <T extends BaseModel, I> void createOrUpdate(BaseModel baseModel) throws ApplicationException {
@@ -27,6 +29,8 @@ public abstract class CommonDao {
         } catch (SQLException e) {
             LOGGER.warn(e.getCause().getMessage());
             throw new ApplicationException(FxmlUtils.getResourceBundle().getString("error.create.update"));
+        } finally {
+            DbManager.closeConnectionSource();
         }
     }
 
@@ -37,6 +41,8 @@ public abstract class CommonDao {
         } catch (SQLException e) {
             LOGGER.warn(e.getCause().getMessage());
             throw new ApplicationException(FxmlUtils.getResourceBundle().getString("error.refresh"));
+        } finally {
+            DbManager.closeConnectionSource();
         }
     }
 
@@ -47,6 +53,8 @@ public abstract class CommonDao {
         } catch (SQLException e) {
             LOGGER.warn(e.getCause().getMessage());
             throw new ApplicationException(FxmlUtils.getResourceBundle().getString("error.delete"));
+        } finally {
+            DbManager.closeConnectionSource();
         }
     }
 
@@ -57,6 +65,8 @@ public abstract class CommonDao {
         } catch (SQLException e) {
             LOGGER.warn(e.getCause().getMessage());
             throw new ApplicationException(FxmlUtils.getResourceBundle().getString("error.delete"));
+        } finally {
+            DbManager.closeConnectionSource();
         }
     }
 
@@ -67,6 +77,8 @@ public abstract class CommonDao {
         } catch (SQLException e) {
             LOGGER.warn(e.getCause().getMessage());
             throw new ApplicationException(FxmlUtils.getResourceBundle().getString("error.not.found"));
+        } finally {
+            DbManager.closeConnectionSource();
         }
     }
 
@@ -77,6 +89,8 @@ public abstract class CommonDao {
         } catch (SQLException e) {
             LOGGER.warn(e.getCause().getMessage());
             throw new ApplicationException(FxmlUtils.getResourceBundle().getString("error.not.found.all"));
+        } finally {
+            DbManager.closeConnectionSource();
         }
     }
 
@@ -86,7 +100,8 @@ public abstract class CommonDao {
         } catch (SQLException e) {
             LOGGER.warn(e.getCause().getMessage());
             throw new ApplicationException(FxmlUtils.getResourceBundle().getString("error.get.dao"));
+        } finally {
+            DbManager.closeConnectionSource();
         }
     }
-
 }
