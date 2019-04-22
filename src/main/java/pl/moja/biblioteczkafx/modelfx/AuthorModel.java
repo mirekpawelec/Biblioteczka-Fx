@@ -43,6 +43,12 @@ public class AuthorModel {
         init();
     }
 
+    public void deleteAuthorInDataBase() throws ApplicationException {
+        AuthorDao authorDao = new AuthorDao();
+        authorDao.deleteById(Author.class, this.authorFxObjectPropertyEdit.get().getId());
+        this.init();
+    }
+
     public AuthorFx getAuthorFxObjectProperty() {
         return authorFxObjectProperty.get();
     }

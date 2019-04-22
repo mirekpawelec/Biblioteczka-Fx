@@ -16,6 +16,8 @@ public class Book implements BaseModel {
     private Category category;
     @DatabaseField(columnName = "TITTLE", canBeNull = false)
     private String title;
+    @DatabaseField(columnName = "DESCRIPTION")
+    private String description;
     @DatabaseField(columnName = "RELASE_DATE")
     private Date releaseDate;
     @DatabaseField(columnName = "ISBN", width = 1)
@@ -24,8 +26,6 @@ public class Book implements BaseModel {
     private int rating;
     @DatabaseField(columnName = "ADDED_DATE")
     private Date addedDate;
-    @DatabaseField(columnName = "DESCRIPTION")
-    private String description;
 
     public Book() {
     }
@@ -62,6 +62,14 @@ public class Book implements BaseModel {
         this.title = title;
     }
 
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
     public Date getReleaseDate() {
         return releaseDate;
     }
@@ -92,13 +100,5 @@ public class Book implements BaseModel {
 
     public void setAddedDate(Date addedDate) {
         this.addedDate = addedDate;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
     }
 }

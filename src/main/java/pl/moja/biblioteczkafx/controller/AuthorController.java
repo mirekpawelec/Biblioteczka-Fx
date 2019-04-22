@@ -1,11 +1,9 @@
 package pl.moja.biblioteczkafx.controller;
 
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Button;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.TextFieldTableCell;
 import pl.moja.biblioteczkafx.modelfx.AuthorFx;
 import pl.moja.biblioteczkafx.modelfx.AuthorModel;
@@ -29,6 +27,8 @@ public class AuthorController implements Initializable {
     private TableColumn<AuthorFx, String> nameColumn;
     @FXML
     private TableColumn<AuthorFx, String> surnameColumn;
+    @FXML
+    private MenuItem deleteAuthorContextMenuItem;
 
     private AuthorModel authorModel;
 
@@ -55,6 +55,8 @@ public class AuthorController implements Initializable {
         this.authorTebleView.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             this.authorModel.setAuthorFxObjectPropertyEdit(newValue);
         });
+        this.deleteAuthorContextMenuItem.disableProperty().bind(
+                this.authorTebleView.getSelectionModel().selectedItemProperty().isNull());
     }
 
     @FXML
@@ -82,6 +84,14 @@ public class AuthorController implements Initializable {
     private void updateInDatabase() {
         try {
             this.authorModel.saveAuthorInDataBaseEdit();
+        } catch (ApplicationException e) {
+            DialogsUtils.errorDialog(e.getMessage());
+        }
+    }
+
+    public void deleteAuthorOnAction(ActionEvent actionEvent) {
+        try {
+            this.authorModel.deleteAuthorInDataBase();
         } catch (ApplicationException e) {
             DialogsUtils.errorDialog(e.getMessage());
         }
